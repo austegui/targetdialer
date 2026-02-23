@@ -30,13 +30,13 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. A background job renews Google Calendar webhook channels every 24 hours, so channels expiring within 48 hours are re-registered before they lapse — confirmed by a log entry after each renewal run.
   4. After a meeting ends, the full transcript (with timestamps and speaker labels) is stored in TargetDialer's own database, not dependent on Vexa's retention.
   5. If a Vexa bot reports ACTIVE status but no transcript segments arrive within 3 minutes, an automatic health check triggers a restart and logs an alert.
-**Plans**: TBD
+**Plans**: 4 plans
 
 Plans:
-- [ ] 01-01: Project scaffold, Docker Compose for Vexa + TargetDialer services, PostgreSQL schema with GIN indexes and extension tables
-- [ ] 01-02: Google OAuth via Auth.js v5 with Calendar API scope, role-based access (admin / member)
-- [ ] 01-03: Calendar Watcher — Google Calendar webhook registration, meeting detection, webhook renewal cron, fallback hourly poll
-- [ ] 01-04: Vexa bot integration — dispatch bot on meeting detection, WebSocket transcript stream to TargetDialer DB, bot health check
+- [ ] 01-01-PLAN.md — Project scaffold, Docker Compose, PostgreSQL schema with GIN indexes and all extension tables
+- [ ] 01-02-PLAN.md — Google OAuth via Auth.js v5 with Calendar API scope, role-based access (admin / member)
+- [ ] 01-03-PLAN.md — Calendar Watcher: webhook registration, meeting detection, renewal cron, fallback poll, auto-join config
+- [ ] 01-04-PLAN.md — Vexa bot integration: dispatch on meeting detection, webhook transcript receiver, health check for deaf bots
 
 ### Phase 2: AI Processing Pipeline
 **Goal**: Within minutes of a meeting ending, team members can read an AI-generated summary with key points, action items (each with an assignee), and key decisions — sourced from any configured LLM provider, with confidence flags on low-quality output.
@@ -103,7 +103,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation | 0/4 | Not started | - |
+| 1. Foundation | 0/4 | Planned | - |
 | 2. AI Processing Pipeline | 0/3 | Not started | - |
 | 3. Search & Archive | 0/2 | Not started | - |
 | 4. Analytics Dashboard | 0/2 | Not started | - |
