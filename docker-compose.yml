@@ -1,0 +1,105 @@
+version: "3.9"
+
+# TargetDialer docker-compose
+# Note: Vexa services (api-gateway, bot-manager, whisper-service, etc.)
+# will be added here when the Vexa repository is available (Phase 01-04).
+# They will be integrated via 'extends' or direct service definition.
+
+networks:
+  meetrec:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-meetrec}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-meetrec}
+      POSTGRES_DB: ${POSTGRES_DB:-meetrec}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-meetrec} -d ${POSTGRES_DB:-meetrec}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    networks:
+      - meetrec
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 5s
+    networks:
+      - meetrec
+    restart: unless-stopped
+
+  web:
+    build:
+      context: ./apps/web
+      dockerfile: Dockerfile
+      target: dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./apps/web:/app
+      - /app/node_modules
+      - /app/.next
+    environment:
+      - DATABASE_URL=${DATABASE_URL:-postgresql://meetrec:meetrec@postgres:5432/meetrec}
+      - REDIS_URL=${REDIS_URL:-redis://redis:6379}
+      - AUTH_SECRET=${AUTH_SECRET:-change-me-in-production}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID:-}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET:-}
+      - NEXTAUTH_URL=${NEXTAUTH_URL:-http://localhost:3000}
+      - PUBLIC_URL=${PUBLIC_URL:-http://localhost:3000}
+      - NODE_ENV=development
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - meetrec
+    restart: unless-stopped
+
+  api:
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile
+      target: dev
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./apps/api:/app
+    environment:
+      - DATABASE_URL=${DATABASE_URL:-postgresql://meetrec:meetrec@postgres:5432/meetrec}
+      - REDIS_URL=${REDIS_URL:-redis://redis:6379}
+      - VEXA_API_URL=${VEXA_API_URL:-http://api-gateway:8056}
+      - VEXA_API_KEY=${VEXA_API_KEY:-}
+      - VEXA_ADMIN_API_KEY=${VEXA_ADMIN_API_KEY:-}
+      - PUBLIC_URL=${PUBLIC_URL:-http://localhost:3000}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - meetrec
+    restart: unless-stopped
