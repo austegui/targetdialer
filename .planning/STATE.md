@@ -11,10 +11,10 @@ See: .planning/PROJECT.md (updated 2026-02-23)
 
 Phase: 1 of 5 (Foundation)
 Plan: 2 of 4 in current phase
-Status: In progress — awaiting checkpoint approval
-Last activity: 2026-02-23 — Completed Task 1 of 01-02-PLAN.md (Auth.js v5 + OAuth); at checkpoint
+Status: Paused — checkpoint deferred to Vercel deployment
+Last activity: 2026-02-23 — 01-02 Task 1 complete (Auth.js v5 + OAuth code written); checkpoint deferred — deploying to Vercel instead of local Docker
 
-Progress: [█░░░░░░░░░] 5% (1/20 plans complete; 01-02 in progress)
+Progress: [█░░░░░░░░░] 5% (1/20 plans complete; 01-02 paused at checkpoint)
 
 ## Performance Metrics
 
@@ -55,21 +55,29 @@ Recent decisions affecting current work:
 
 ### Pending Todos
 
-- Enable Docker Desktop WSL integration before running `docker compose up` (see 01-01 SUMMARY User Setup)
-- Set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in .env (required for OAuth flow to work)
-- Run `pnpm db:push` after Docker is up to create Auth.js tables in database
-- Approve checkpoint for 01-02 once OAuth sign-in is verified working
+- Deploy to Vercel — user will provide git remote for push
+- Set GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, AUTH_SECRET as Vercel env vars
+- Add Vercel deployment URL as authorized redirect URI in Google Cloud Console: `https://<vercel-url>/api/auth/callback/google`
+- Set up PostgreSQL (Vercel Postgres or external) and set DATABASE_URL env var in Vercel
+- Verify OAuth checkpoint on Vercel deployment (01-02 Task 2)
+- Resume /gsd:execute-phase 1 after checkpoint approval to continue Waves 3-4
 
 ### Blockers/Concerns
 
 - [Phase 1 — RESOLVED]: Auth.js v5 + Next.js 16 peer dependency conflict — using Next.js 15.5 LTS as documented fallback
-- [Phase 1 — ACTIVE]: Docker Desktop WSL integration not active — `docker compose up` cannot run until enabled in Docker Desktop Settings > Resources > WSL Integration
-- [Phase 1 — ACTIVE]: 01-02 checkpoint pending — OAuth flow cannot be verified without Docker + Google credentials configured
+- [Phase 1 — PIVOTED]: Local Docker testing skipped — deploying to Vercel for testing instead
+- [Phase 1 — ACTIVE]: 01-02 checkpoint pending — OAuth flow to be verified on Vercel deployment
 - [Phase 1]: Vexa meeting-end event mechanism unconfirmed — need to verify whether Vexa emits a webhook/callback or requires polling for meeting status changes before implementing the AI Worker trigger
 - [Phase 1]: Vexa diarization API contract (exact format of speaker labels in transcript output) not confirmed from docs — must verify during Phase 1 before building any speaker-dependent UI
 
 ## Session Continuity
 
-Last session: 2026-02-23T21:07:54Z
-Stopped at: 01-02 Task 1 complete (commit 64334a3); at checkpoint:human-verify — awaiting Google OAuth flow verification
-Resume file: None
+Last session: 2026-02-23
+Stopped at: Phase 1 execution paused. Plans 01-01 and 01-02 Task 1 complete. 01-02 checkpoint deferred — user pivoting to Vercel deployment. Plans 01-03, 01-04 not started.
+Resume with: `/gsd:resume-work` after pushing to git remote and deploying to Vercel. Then approve 01-02 checkpoint and continue `/gsd:execute-phase 1` for remaining waves.
+
+### Checkpoint State (01-02)
+- **Commit:** 64334a3
+- **Completed:** Task 1 (Auth.js v5 + Google OAuth + protected routes + schema)
+- **Pending:** Task 2 (human-verify checkpoint — OAuth flow verification)
+- **To resume:** Approve checkpoint, then spawn continuation agent to create 01-02-SUMMARY.md

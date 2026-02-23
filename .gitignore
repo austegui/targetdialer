@@ -8,6 +8,7 @@ node_modules/
 .next/
 .pnpm-store/
 pnpm-lock.yaml
+*.tsbuildinfo
 
 # Python
 __pycache__/
