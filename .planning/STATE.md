@@ -10,28 +10,28 @@ See: .planning/PROJECT.md (updated 2026-02-23)
 ## Current Position
 
 Phase: 1 of 5 (Foundation)
-Plan: 0 of 4 in current phase
-Status: Ready to plan
-Last activity: 2026-02-23 — Roadmap created, requirements mapped, STATE initialized
+Plan: 1 of 4 in current phase
+Status: In progress
+Last activity: 2026-02-23 — Completed 01-01-PLAN.md (monorepo scaffold + schema)
 
-Progress: [░░░░░░░░░░] 0%
+Progress: [█░░░░░░░░░] 5% (1/20 plans)
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 0
-- Average duration: —
-- Total execution time: 0 hours
+- Total plans completed: 1
+- Average duration: 12 min
+- Total execution time: 12 min
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| - | - | - | - |
+| 01-foundation | 1 | 12 min | 12 min |
 
 **Recent Trend:**
-- Last 5 plans: —
-- Trend: —
+- Last 5 plans: 01-01 (12 min)
+- Trend: Baseline set
 
 *Updated after each plan completion*
 
@@ -47,19 +47,24 @@ Recent decisions affecting current work:
 - [Pre-Phase 1]: AI provider-agnostic via Vercel AI SDK v6 — single env var swap, no code changes
 - [Pre-Phase 1]: PostgreSQL FTS with GIN indexes sufficient at 5-20 user scale — no Elasticsearch needed
 - [Pre-Phase 1]: Analytics deferred to Phase 4 — requires validated diarization data from real meetings
+- [01-01]: Next.js resolved to 15.5.12 LTS (not 16) — pnpm honored ^15.1.0 range; 15.5 is the documented fallback for Auth.js v5 peer dep conflict with Next.js 16
+- [01-01]: pnpm v10 --strict-peer-dependencies=false replaces npm's --legacy-peer-deps — update Dockerfiles and CI scripts accordingly
+- [01-01]: Drizzle ORM (TypeScript) is schema source of truth; Python SQLAlchemy models are reference-only stubs
+- [01-01]: Docker Desktop WSL integration not active — schema validation done with PGLite (WASM postgres); Docker must be enabled before docker compose up
 
 ### Pending Todos
 
-None yet.
+- Enable Docker Desktop WSL integration before running `docker compose up` (see 01-01 SUMMARY User Setup)
 
 ### Blockers/Concerns
 
+- [Phase 1 — RESOLVED]: Auth.js v5 + Next.js 16 peer dependency conflict — using Next.js 15.5 LTS as documented fallback
+- [Phase 1 — ACTIVE]: Docker Desktop WSL integration not active — `docker compose up` cannot run until enabled in Docker Desktop Settings > Resources > WSL Integration
 - [Phase 1]: Vexa meeting-end event mechanism unconfirmed — need to verify whether Vexa emits a webhook/callback or requires polling for meeting status changes before implementing the AI Worker trigger
-- [Phase 1]: Auth.js v5 + Next.js 16 peer dependency conflict is a live issue — verify resolution at project start; fallback is Next.js 15.5 LTS
 - [Phase 1]: Vexa diarization API contract (exact format of speaker labels in transcript output) not confirmed from docs — must verify during Phase 1 before building any speaker-dependent UI
 
 ## Session Continuity
 
-Last session: 2026-02-23
-Stopped at: Roadmap created and written to disk. REQUIREMENTS.md traceability updated. Ready to begin Phase 1 planning.
+Last session: 2026-02-23T21:03:33Z
+Stopped at: Completed 01-01-PLAN.md (monorepo scaffold, Drizzle schema, FastAPI service)
 Resume file: None
